@@ -76,6 +76,19 @@ data:
     #!/bin/sh
     set -o pipefail
 
+    azure_auth_loc=/root/azure-auth.json
+    touch /root/azure-auth.json
+
+    if [ -f "$azure_auth_loc" ]
+    then
+    echo "${AZURE_AUTH_CONTENT}" > "$azure_auth_loc"
+    echo "writing to file"
+    fi
+    export AZURE_AUTH_LOCATION=$azure_auth_loc
+    echo "Azure auth location"
+    echo "$AZURE_AUTH_LOCATION"
+    cat $AZURE_AUTH_LOCATION
+
     result_dir=/tmp
     if [ "${PBENCH_INSTRUMENTATION}" = "true" ]; then
       result_dir=${benchmark_results_dir}

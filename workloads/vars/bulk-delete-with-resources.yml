@@ -7,28 +7,31 @@ ansible_private_key_file: "{{ lookup('env', 'PRIVATE_KEY')|default('~/.ssh/id_rs
 
 orchestration_user: "{{ lookup('env', 'ORCHESTRATION_USER')|default('root', true) }}"
 ###############################################################################
-# Deployments per namespace cluster limits workload variables.
+# Namespaces per cluster workload variables.
 ###############################################################################
-
-# Container image in use
 workload_image: "{{ lookup('env', 'WORKLOAD_IMAGE')|default('quay.io/openshift-scale/scale-ci-workload', true) }}"
-
-# Use nodeselector to place workload job on specific node
-workload_job_node_selector: "{{ lookup('env', 'WORKLOAD_JOB_NODE_SELECTOR')|default(true, true)|bool }}"
-# Tolerate taint on workload driver
-workload_job_taint: "{{ lookup('env', 'WORKLOAD_JOB_TAINT')|default(true, true)|bool }}"
-# Privileged job container
-workload_job_privileged: "{{ lookup('env', 'WORKLOAD_JOB_PRIVILEGED')|default(true, true)|bool }}"
+workload_job_node_selector: "{{ lookup('env', 'WORKLOAD_JOB_NODE_SELECTOR')|default(false, true)|bool }}"
+workload_job_taint: "{{ lookup('env', 'WORKLOAD_JOB_TAINT')|default(false, true)|bool }}"
+workload_job_privileged: "{{ lookup('env', 'WORKLOAD_JOB_PRIVILEGED')|default(false, true)|bool }}"
 
 # Kubeconfig for tooling container script
 kubeconfig_file: "{{ lookup('env', 'KUBECONFIG_FILE')|default('~/.kube/config', true) }}"
 
 # pbench variables
+pbench_instrumentation: "{{ lookup('env', 'PBENCH_INSTRUMENTATION')|default(false, true)|bool|lower }}"
+enable_pbench_agents: "{{ lookup('env', 'ENABLE_PBENCH_AGENTS')|default(false, true)|bool }}"
+enable_pbench_copy: "{{ lookup('env', 'ENABLE_PBENCH_COPY')|default(false, true)|bool|lower }}"
 pbench_ssh_private_key_file: "{{ lookup('env', 'PBENCH_SSH_PRIVATE_KEY_FILE')|default('~/.ssh/id_rsa', true) }}"
 pbench_ssh_public_key_file: "{{ lookup('env', 'PBENCH_SSH_PUBLIC_KEY_FILE')|default('~/.ssh/id_rsa.pub', true) }}"
-enable_pbench_agents: "{{ lookup('env', 'ENABLE_PBENCH_AGENTS')|default(false, true)|bool }}"
 pbench_server: "{{ lookup('env', 'PBENCH_SERVER')|default('', true) }}"
 
 # Other variables for workload tests
 scale_ci_results_token: "{{ lookup('env', 'SCALE_CI_RESULTS_TOKEN')|default('', true) }}"
 job_completion_poll_attempts: "{{ lookup('env', 'JOB_COMPLETION_POLL_ATTEMPTS')|default(360, true)|int }}"
+
+# Services per namespace cluster limits workload specific parameters:
+bulk_delete_with_resources_test_prefix: "{{ lookup('env', 'BULK_DELETE_WITH_RESOURCES_TEST_PREFIX')|default('bulk_delete', true) }}"
+bulk_delete_with_resources_cleanup: "{{ lookup('env', 'BULK_DELETE_WITH_RESOURCES_CLEANUP')|default(true, true)|bool|lower }}"
+bulk_delete_with_resources_basename: "{{ lookup('env', 'BULK_DELETE_WITH_RESOURCES_BASENAME')|default('bulk_delete', true) }}"
+bulk_delete_with_resources_projects: "{{ lookup('env', 'BULK_DELETE_WITH_RESOURCES_PROJECTS')|default(2, true)|int }}"
+bulk_delete_with_resources_count:  "{{ lookup('env', 'BULK_DELETE_WITH_RESOURCES_COUNT')|default(100, true)|int }}"
