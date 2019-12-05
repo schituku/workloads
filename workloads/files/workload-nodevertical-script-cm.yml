@@ -82,12 +82,11 @@ data:
     if [ -f "$azure_auth_loc" ]
     then
     echo "${AZURE_AUTH_CONTENT}" > "$azure_auth_loc"
-    echo "writing to file"
+    echo "Azure auth file created"
     fi
+    sed -i "s/\"{/{/g" $azure_auth_loc
+    sed -i "s/}\"/}/g" $azure_auth_loc
     export AZURE_AUTH_LOCATION=$azure_auth_loc
-    echo "Azure auth location"
-    echo "$AZURE_AUTH_LOCATION"
-    cat $AZURE_AUTH_LOCATION
 
     result_dir=/tmp
     if [ "${PBENCH_INSTRUMENTATION}" = "true" ]; then

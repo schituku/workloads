@@ -4,7 +4,7 @@ metadata:
   name: scale-ci-workload-{{workload_job}}-env
 data:
   ENABLE_PBENCH_AGENTS: "{{enable_pbench_agents|bool|lower}}"
-  AZURE_AUTH_CONTENT: "{{azure_auth_file}}"
+  AZURE_AUTH_CONTENT: '{{azure_auth_file | to_json }}'
 {% if workload_job == "http" %}
 {% for v in http_env_vars %}
   {{ v }}: "{{ lookup('env', v) }}"
